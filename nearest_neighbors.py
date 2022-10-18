@@ -3,7 +3,7 @@ from scipy import spatial
 
 '''
 Author: Antonio Lang
-Date: 17 October 2022
+Date: 18 October 2022
 '''
 
 def KNN_test(X_train,Y_train,X_test,Y_test,K):
@@ -20,14 +20,9 @@ def KNN_test(X_train,Y_train,X_test,Y_test,K):
 def choose_K(X_train,Y_train,X_val,Y_val):
     best_acc = 0
     best_k = 1
-    len_train = len(X_train)
-    for i in range(1, len_train): # iterate by 2
-        num_correct = 0
-
-        acc = num_correct / len_train
-        if acc > best_acc: best_acc = acc
-        # iterate over all values of k, get best acc
-    # find the best value of K
+    for i in range(1, len(X_train), 2): # iterate by 2 to avoid ties
+        acc = KNN_test(X_train, Y_train, X_val, Y_val, i)
+        if acc > best_acc: best_acc = acc; best_k = i
     return best_k
 
 def get_prediction(sorted_distances, K):
