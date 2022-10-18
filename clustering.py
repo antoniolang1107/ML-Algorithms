@@ -1,16 +1,20 @@
+from operator import index
 import numpy as np
 from scipy import spatial
 
 '''
 Author: Antonio Lang
-Date: 17 October 2022
+Date: 18 October 2022
 '''
 
 def K_Means(X,K,mu=None):
     if mu is None:
-        cluster_centers = np.random.choice(X, K, replace=False)
+        # generates K random indicies to be the starting centers
+        index_list = [*range(0,X.shape[0])]
+        cluster_centers = np.empty((K, X.shape[1]))
+        rand_index = np.random.choice(index_list, K, replace=False)
+        cluster_centers = X[rand_index]
     cluster_assignment = []
-    cluster_centers = np.array([[5], [10]])
     X = np.resize(X, (X.shape[0],cluster_centers.shape[1]))
     converged = False
     epoch = 0
