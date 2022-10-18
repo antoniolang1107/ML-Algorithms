@@ -1,4 +1,3 @@
-from random import sample
 import numpy as np
 from scipy import spatial
 
@@ -15,7 +14,7 @@ def K_Means(X,K,mu=None):
     X = np.resize(X, (X.shape[0],cluster_centers.shape[1]))
     converged = False
     epoch = 0
-    epoch_limit = 10
+    epoch_limit = 100
 
     while converged is not True and epoch < epoch_limit:
         distances = spatial.distance.cdist(cluster_centers, X)
@@ -29,9 +28,24 @@ def K_Means(X,K,mu=None):
 
 
 def K_Means_better(X,K):
-    # run K_Means until receiving the same cluster centers
-    
-    pass
+    converged_centers = False
+    centers_list = []
+
+    while converged_centers is not True:
+        centers_list.append(K_Means(X, K))
+        converged_centers = check_converged_centers(centers_list)
+    return centers_list[len(centers_list)-1]
+
+def check_converged_centers(cluster_centers):
+    unique_centers = []
+    unique_center_count = []
+    for centers in cluster_centers:
+        if centers not in unique_centers: unique_centers.append(centers), unique_center_count.append(1)
+        else:
+            for i, unique_center in enumerate(unique_centers):
+                if unique_center == centers:
+                    unique_center_count[i] += 1
+    return max(unique_center_count) > len(cluster_centers) / 2
 
 def assign_clusters(distances):
     assignments = []
